@@ -3,7 +3,7 @@ LIBS=-lsfml-graphics -lsfml-window -lsfml-system
 all: Timber
 
 Timber.o: Timber.cpp
-	g++ -c Timber.cpp -o Timber.o
+	g++ -std=c++11 -c Timber.cpp -o Timber.o
 
 Timber: Timber.o
 	g++ -o Timber Timber.o $(LIBS)
