@@ -55,7 +55,7 @@ int main()
   Sprite spriteTree;
   spriteTree.setTexture(textureTree);
   spriteTree.setPosition(810, 0);
-
+  
   // Prepare the bee
   Texture textureBee;
   textureBee.loadFromFile("../graphics/bee.png");
@@ -76,7 +76,7 @@ int main()
   textureCloud.loadFromFile("../graphics/cloud.png");
 
   // Make the clouds with arrays
-  const int NUM_CLOUDS = 3;
+  const int NUM_CLOUDS = 6;
   Sprite clouds[NUM_CLOUDS];
   int cloudSpeeds[NUM_CLOUDS];
   bool cloudsActive[NUM_CLOUDS];
@@ -109,8 +109,9 @@ int main()
   // Draw some text
   int score = 0;
 
-  sf::Text messageText;
-  sf::Text scoreText;
+  Text messageText;
+  Text scoreText;
+  Text fpsText;
 
   // We need to choose a font
   Font font;
@@ -119,6 +120,12 @@ int main()
   // Set the font to our message
   messageText.setFont(font);
   scoreText.setFont(font);
+  fpsText.setFont(font);
+
+  // Set up the fps text
+  fpsText.setColor(Color::White);
+  fpsText.setCharacterSize(100);
+  fpsText.setPosition(1200, 20);
 
   // Assign the actual message
   messageText.setString("Press Enter to start!");
@@ -143,6 +150,17 @@ int main()
   messageText.setPosition(1920 / 2.0f, 1080 / 2.0f);
 
   scoreText.setPosition(20, 20);
+
+  // Backgrounds for the text
+  RectangleShape rect1;
+  rect1.setFillColor(Color(0, 0, 0, 150));
+  rect1.setSize(Vector2f(600, 105));
+  rect1.setPosition(0, 30);
+
+  RectangleShape rect2;
+  rect2.setFillColor(Color(0, 0, 0, 150));
+  rect2.setSize(Vector2f(1000, 105));
+  rect2.setPosition(1150, 30);
 
   // Prepare 6 branches
   Texture textureBranch;
@@ -216,6 +234,9 @@ int main()
   ootBuffer.loadFromFile("../sound/out_of_time.wav");
   Sound outOfTime;
   outOfTime.setBuffer(ootBuffer);
+
+  // control the drawing of the score
+  int lastDrawn;
   
   while (window.isOpen()) {
     /*
@@ -285,7 +306,7 @@ int main()
 
 	// set the log flying to the left
 	spriteLog.setPosition(810, 720);
-	logSpeedX = -1500;
+	logSpeedX = -5000;
 	logActive = true;
 
 	acceptInput = false;
@@ -329,7 +350,6 @@ int main()
     */
 
     if (!paused) {
-
       // Measure time
       Time dt = clock.restart();
 
@@ -408,11 +428,19 @@ int main()
 	  } 
 	}
       }
+      lastDrawn++;
+      if (lastDrawn == 100) {
+	// Update score text
+	std::stringstream ss;
+	ss << "Score = " << score;
+	scoreText.setString(ss.str());
 
-      // Update score text
-      std::stringstream ss;
-      ss << "Score = " << score;
-      scoreText.setString(ss.str());
+	// Draw the fps
+	std::stringstream ss2;
+	ss2 << "FPS = " << 1/dt.asSeconds();
+	fpsText.setString(ss2.str());
+	lastDrawn = 0;
+      }
 
       // update the branch sprites
       for (int i = 0; i < NUM_BRANCHES; i++) {
@@ -421,11 +449,13 @@ int main()
 	  // Move the sprite to the left side
 	  branches[i].setPosition(610, height);
 	  // Flip the sprite around the other way
+	  branches[i].setOrigin(220, 40);
 	  branches[i].setRotation(180);
 	} else if (branchPositions[i] == side::RIGHT) {
 	  // Move the sprite to the right side
 	  branches[i].setPosition(1330, height);
 	  // Set the sprite rotation to normal
+	  branches[i].setOrigin(220, 40);
 	  branches[i].setRotation(0);
 	} else {
 	  // Hide the branch
@@ -516,11 +546,18 @@ int main()
     // Draw the gravestone
     window.draw(spriteRIP);
 
+    // Draw the backgrounds for the text
+    window.draw(rect1);
+    window.draw(rect2);
+
     // Draw the bee
     window.draw(spriteBee);
 
     // Draw the score
     window.draw(scoreText);
+
+    // Draw the FPS
+    window.draw(fpsText);
 
     // Draw the timebar
     window.draw(timeBar);
@@ -547,7 +584,7 @@ void updateBranches(int seed) {
   // Spawn a new branch at position 0
   // LEFT, RIGHT or NONE
   srand((int)time(0) + seed);
-  int r = (rand() % 5);
+  int r = (rand() % (NUM_BRANCHES - 1));
   switch (r) {
   case 0:
     branchPositions[0] = side::LEFT;
