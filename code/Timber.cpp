@@ -20,17 +20,17 @@ side branchPositions[NUM_BRANCHES];
 int main()
 {
   // Low res code
-  // VideoMode vm(1280, 720);
-  // RenderWindow window(vm, "Timber!!!");
-  // View view(sf::FloatRect(0, 0, 1920, 1080));
-  // window.setView(view);
+  VideoMode vm(1280, 720);
+  RenderWindow window(vm, "Timber!!!");
+  View view(sf::FloatRect(0, 0, 1920, 1080));
+  window.setView(view);
   // End of low res code!! Everything else is the same!!
 
   // Create a video mode object
-  VideoMode vm(1920, 1080);
+  //VideoMode vm(1920, 1080);
 
   // Create and open a window for the game
-  RenderWindow window(vm, "Timber!!!", Style::Fullscreen);
+  //RenderWindow window(vm, "Timber!!!", Style::Fullscreen);
 
   // Create a texture to hold a graphic on the GPU
   Texture textureBackground;
@@ -121,7 +121,7 @@ int main()
   fpsText.setFont(font);
 
   // Set up the fps text
-  fpsText.setColor(Color::White);
+  fpsText.setFillColor(Color::White);
   fpsText.setCharacterSize(100);
   fpsText.setPosition(1200, 20);
 
@@ -134,8 +134,8 @@ int main()
   scoreText.setCharacterSize(100);
 
   // Choose a color
-  messageText.setColor(Color::White);
-  scoreText.setColor(Color::White);
+  messageText.setFillColor(Color::White);
+  scoreText.setFillColor(Color::White);
 
   // Position the text
   FloatRect textRect = messageText.getLocalBounds();
@@ -247,12 +247,11 @@ int main()
 
     while (window.pollEvent(event)) {
       if (event.type == Event::KeyReleased && !paused) {
-	// Listen for key presses again
-	acceptInput = true;
+	      // Listen for key presses again
+	      acceptInput = true;
 
-	// hide the axe
-	spriteAxe.setPosition(2000,
-			      spriteAxe.getPosition().y);
+	      // hide the axe
+	      spriteAxe.setPosition(2000, spriteAxe.getPosition().y);
       }
     }
 
@@ -270,7 +269,7 @@ int main()
 
       // Make all the branches disappear
       for (int i = 1; i < NUM_BRANCHES; i++) {
-	branchPositions[i] = side::NONE;
+	      branchPositions[i] = side::NONE;
       }
 
       // Make sure the gravestone is hidden
