@@ -1,0 +1,75 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://scripts/Main.gd" type="Script" id=1]
+[ext_resource path="res://scenes/Cloud.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/Branch.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/Log.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/Bee.tscn" type="PackedScene" id=5]
+[ext_resource path="res://sound/out_of_time.wav" type="AudioStream" id=6]
+[ext_resource path="res://graphics/background.png" type="Texture" id=7]
+[ext_resource path="res://graphics/tree2.png" type="Texture" id=8]
+[ext_resource path="res://graphics/tree.png" type="Texture" id=9]
+[ext_resource path="res://graphics/rip.png" type="Texture" id=10]
+[ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=11]
+[ext_resource path="res://scenes/HUD.tscn" type="PackedScene" id=12]
+
+[node name="Main" type="Node2D"]
+script = ExtResource( 1 )
+Cloud = ExtResource( 2 )
+Branch = ExtResource( 3 )
+Log = ExtResource( 4 )
+Bee = ExtResource( 5 )
+
+[node name="OutOfTimePlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 6 )
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 960, 540 )
+texture = ExtResource( 7 )
+
+[node name="BackgroundTrees" type="Node2D" parent="."]
+editor/display_folded = true
+
+[node name="tree2" type="Sprite" parent="BackgroundTrees"]
+position = Vector2( 235.007, 412.9 )
+scale = Vector2( 1.03106, 0.674428 )
+texture = ExtResource( 8 )
+
+[node name="tree3" type="Sprite" parent="BackgroundTrees"]
+position = Vector2( 1741.56, 396.287 )
+scale = Vector2( 1.03106, 0.653302 )
+texture = ExtResource( 8 )
+
+[node name="tree4" type="Sprite" parent="BackgroundTrees"]
+position = Vector2( 556.361, 361.428 )
+scale = Vector2( 1.03106, 0.595204 )
+texture = ExtResource( 8 )
+
+[node name="tree5" type="Sprite" parent="BackgroundTrees"]
+position = Vector2( 1431, 437.484 )
+scale = Vector2( 1, 0.720073 )
+texture = ExtResource( 8 )
+
+[node name="CloudContainer" type="Node2D" parent="."]
+
+[node name="BeeContainer" type="Node2D" parent="."]
+
+[node name="Tree" type="Sprite" parent="."]
+position = Vector2( 960, 450 )
+texture = ExtResource( 9 )
+
+[node name="LogContainer" type="Node2D" parent="."]
+
+[node name="BranchContainer" type="Node2D" parent="."]
+
+[node name="RIP" type="Sprite" parent="."]
+visible = false
+position = Vector2( 1196.91, 824.727 )
+texture = ExtResource( 10 )
+
+[node name="Player" parent="." instance=ExtResource( 11 )]
+position = Vector2( 1200, 800 )
+z_as_relative = false
+
+[node name="HUD" parent="." instance=ExtResource( 12 )]
+[connection signal="hit_branch" from="Player" to="." method="game_over"]
